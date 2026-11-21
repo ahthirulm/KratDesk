@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {useServerFn} from '@tanstack/react-start';
 import {Link} from '@tanstack/react-router';
 import {Building2,ArrowUpRight,Plus,Pencil,ArrowRightLeft,ShieldCheck,Truck,Tags,UsersRound,Settings,HandCoins,TriangleAlert} from 'lucide-react';
 import {toast} from 'sonner';
@@ -22,6 +23,7 @@ import {useRef} from 'react';
 import {Checkbox} from '@/components/ui/checkbox';
 import {supabase} from '@/integrations/supabase/client';
 import {formatWeight} from '@/lib/pos-rules';
+import {factoryResetEverything} from '@/lib/factory-reset.functions';
 export function CentralManagement(){
  const {allData,branches,staffUsers,movements,can,data,isManagingDirector}=usePos();
  if(!['Manage settings','Manage users','Manage suppliers','Manage categories'].some(p=>can(p)))return <Empty title="Administration access required" description=""/>;
@@ -32,6 +34,7 @@ export function CentralManagement(){
 function FactoryReset(){
  const {data,branches}=usePos();
  const client=useQueryClient();
+ const completeFactoryReset=useServerFn(factoryResetEverything);
  const [open,setOpen]=useState(false);
  const [phrase,setPhrase]=useState('');
  const [password,setPassword]=useState('');
@@ -43,6 +46,7 @@ function FactoryReset(){
  const everyBranch=active.length>0&&pickedBranches.length===active.length;
  const widePending=!everyBranch&&pickedGroups.some(id=>RESET_GROUPS.find(g=>g.id===id)?.wide);
  const ready=resetReady(phrase,password,pickedBranches,pickedGroups)&&!widePending;
+ const resettingEverything=everyBranch&&pickedGroups.length===RESET_GROUPS.length;
  const toggle=(list:string[],id:string,set:(value:string[])=>void)=>set(list.includes(id)?list.filter(v=>v!==id):[...list,id]);
  const pickAll=()=>{setPickedBranches(active.map(b=>b.id));setPickedGroups(RESET_GROUPS.map(g=>g.id));};
  const openDialog=()=>{setPhrase('');setPassword('');setError('');setPickedBranches([]);setPickedGroups([]);setOpen(true);};
