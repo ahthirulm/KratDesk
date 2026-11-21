@@ -1,0 +1,1 @@
+COMMENT ON SCHEMA public IS 'KaratDesk preview: original ordered application migration history restored through 0077.';

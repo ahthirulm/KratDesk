@@ -1,0 +1,3 @@
+import {createFileRoute} from '@tanstack/react-router';
+import {OldGold} from '@/components/pos/old-gold';
+export const Route=createFileRoute('/_authenticated/old-gold')({head:()=>({meta:[{title:'Old gold trading | KaratDesk'},{name:'description',content:'Buy and sell old gold with branch weight holdings by purity and original unit prices.'},{property:'og:title',content:'Old gold trading | KaratDesk'},{property:'og:description',content:'Branch old-gold purchases, sales and pooled purity balances.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary_large_image'}]}),component:OldGold});

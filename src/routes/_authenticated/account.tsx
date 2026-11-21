@@ -1,0 +1,3 @@
+import {createFileRoute} from '@tanstack/react-router';
+import {BranchAccount} from '@/components/pos/branch-account';
+export const Route=createFileRoute('/_authenticated/account')({head:()=>({meta:[{title:'Branch account | KaratDesk'},{name:'description',content:'One branch view of cash, currency held, old gold held and combined profit.'},{property:'og:title',content:'Branch account | KaratDesk'},{property:'og:description',content:'Cash, currency, old gold and profit for one branch in one screen.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary_large_image'}]}),component:BranchAccount});

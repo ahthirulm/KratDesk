@@ -1,0 +1,4 @@
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS phone text NOT NULL DEFAULT '', ADD COLUMN IF NOT EXISTS avatar_path text;
+CREATE POLICY staff_avatar_read ON storage.objects FOR SELECT TO authenticated USING (bucket_id = 'staff-avatars' AND (storage.foldername(name))[1] = auth.uid()::text);
+CREATE POLICY staff_avatar_insert ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'staff-avatars' AND (storage.foldername(name))[1] = auth.uid()::text AND lower(storage.extension(name)) IN ('jpg','jpeg','png','webp'));
+CREATE POLICY staff_avatar_delete ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'staff-avatars' AND (storage.foldername(name))[1] = auth.uid()::text);

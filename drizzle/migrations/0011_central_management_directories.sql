@@ -1,0 +1,17 @@
+CREATE TABLE public.branches (id text PRIMARY KEY, code text NOT NULL UNIQUE, name text NOT NULL, address text NOT NULL DEFAULT '', phone text NOT NULL DEFAULT '', active boolean NOT NULL DEFAULT true);
+GRANT SELECT ON public.branches TO authenticated; GRANT ALL ON public.branches TO service_role;
+ALTER TABLE public.branches ENABLE ROW LEVEL SECURITY;
+CREATE TABLE public.staff_roles (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), name text NOT NULL UNIQUE, permissions text[] NOT NULL DEFAULT '{}');
+GRANT SELECT ON public.staff_roles TO authenticated; GRANT ALL ON public.staff_roles TO service_role;
+ALTER TABLE public.staff_roles ENABLE ROW LEVEL SECURITY;
+CREATE TABLE public.staff_access (user_id uuid PRIMARY KEY, role_id uuid REFERENCES public.staff_roles(id) NOT NULL, branch_ids text[] NOT NULL DEFAULT '{}', active boolean NOT NULL DEFAULT false);
+GRANT SELECT ON public.staff_access TO authenticated; GRANT ALL ON public.staff_access TO service_role;
+ALTER TABLE public.staff_access ENABLE ROW LEVEL SECURITY;
+CREATE POLICY staff_access_read ON public.staff_access FOR SELECT TO authenticated USING (user_id=auth.uid() OR public.has_role(auth.uid(),'admin'));
+CREATE POLICY staff_roles_read ON public.staff_roles FOR SELECT TO authenticated USING (public.has_role(auth.uid(),'admin') OR EXISTS (SELECT 1 FROM public.staff_access a WHERE a.user_id=auth.uid() AND a.active AND a.role_id=staff_roles.id));
+CREATE POLICY branches_read ON public.branches FOR SELECT TO authenticated USING (public.has_role(auth.uid(),'admin') OR EXISTS (SELECT 1 FROM public.staff_access a WHERE a.user_id=auth.uid() AND a.active AND branches.id=ANY(a.branch_ids)));
+CREATE TABLE public.stock_movements (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), item_id uuid REFERENCES public.items(id) NOT NULL, from_branch text REFERENCES public.branches(id) NOT NULL, to_branch text REFERENCES public.branches(id) NOT NULL, internal_tag text NOT NULL, system_tag text NOT NULL, note text NOT NULL DEFAULT '', performed_by uuid NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), CHECK (from_branch<>to_branch));
+GRANT SELECT ON public.stock_movements TO authenticated; GRANT ALL ON public.stock_movements TO service_role;
+ALTER TABLE public.stock_movements ENABLE ROW LEVEL SECURITY;
+CREATE POLICY stock_movements_read ON public.stock_movements FOR SELECT TO authenticated USING (public.has_role(auth.uid(),'admin') OR EXISTS(SELECT 1 FROM public.staff_access a WHERE a.user_id=auth.uid() AND a.active AND (stock_movements.from_branch=ANY(a.branch_ids) OR stock_movements.to_branch=ANY(a.branch_ids))));
+CREATE INDEX stock_movements_item ON public.stock_movements(item_id,created_at);

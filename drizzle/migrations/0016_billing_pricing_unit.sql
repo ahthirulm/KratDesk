@@ -1,0 +1,5 @@
+ALTER TABLE public.settings ADD COLUMN pricing_unit text NOT NULL DEFAULT 'Pound (8g)' CHECK (pricing_unit IN ('Gram','Pound (8g)'));
+ALTER TABLE public.sale_items ADD COLUMN pricing_unit text CHECK (pricing_unit IN ('Gram','Pound (8g)')), ADD COLUMN unit_price numeric(16,2);
+CREATE FUNCTION public.capture_billing_unit() RETURNS trigger LANGUAGE plpgsql SET search_path=public AS $$ DECLARE j jsonb; BEGIN SELECT x INTO j FROM jsonb_array_elements(coalesce(nullif(current_setting('app.sale_lines',true),''),'[]')::jsonb) x WHERE x->>'id'=NEW.item_id::text; IF j->>'price_unit' IN ('Gram','Pound (8g)') AND j->>'unit_price' IS NOT NULL THEN NEW.pricing_unit:=j->>'price_unit'; NEW.unit_price:=(j->>'unit_price')::numeric; END IF; RETURN NEW; END $$;
+CREATE TRIGGER capture_billing_unit BEFORE INSERT ON public.sale_items FOR EACH ROW EXECUTE FUNCTION public.capture_billing_unit();
+DO $$ DECLARE d text; BEGIN SELECT pg_get_functiondef('public.internal_complete_sale(jsonb)'::regprocedure) INTO d; d:=replace(d,'round(r.weight*rate,2)','round(r.weight*case when j->>''price_unit''=''Pound (8g)'' then (j->>''unit_price'')::numeric/8 else rate end,2)'); EXECUTE d; END $$;

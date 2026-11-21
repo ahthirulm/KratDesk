@@ -1,0 +1,50 @@
+KaratDesk 2.6.0 — verification and release status
+Prepared 21 November 2026
+
+READY
+Application source and owner-approved version 2.6.0.
+Shared local-staff creation correction and restore-password corrections.
+Complete self-host build source, original 78 production SQL migrations, tests and full handover.
+
+PERFORMED
+Application tests: 255 passed, 49 files.
+Original hosting checks: 9 passed.
+New release-assembly checks: 2 passed (11 hosting/assembly checks total).
+Original production SQL comparison against uploaded v2.5.3 source: 78 files, zero differences.
+Isolated Node build: succeeded with self-host runtime/browser/Linux overlays.
+Final Node output: exactly 78 production migrations, preview-only 0078 excluded.
+Compiled Node startup: succeeded locally with disposable non-production placeholder settings.
+Public runtime configuration: same-origin /sb; only public configuration fields.
+JavaScript delivery: 122 responses matched disk byte-for-byte.
+Inherited backend/email/job configuration values in inspected compiled output: zero matches.
+Content-route metadata: 35 content routes checked, no missing required metadata.
+
+SOURCE HISTORY
+0000–0077: original production migrations, preserved byte-identically.
+0078_restore_karatdesk_preview_history.sql: preview-only schema comment, retained in complete source but excluded from Node deployment output.
+Two assembly regression tests verify that omission and unchanged original migration packaging.
+
+SOURCE EXPORT
+Recursive staged-source inspection: completed, including hidden files.
+Actual environment files, private configuration values, repository directories,
+dependencies, generated build output, Python caches and logs: excluded.
+Inherited environment configuration matches in staged source: zero.
+ZIP CRC, one-root layout and per-file SHA-256 manifest are checked before Files delivery.
+
+NOT PERFORMED / BLOCKED
+Final Dell in-place ZIP assembly: previous Dell upgrade ZIP has not been attached.
+Production installation, SSH verification, real owner password-confirmed restore: not performed.
+Full upgrade against prior installed backend/app on a disposable matching host: not performed.
+Real authenticated create/read/update/delete, local login and TOTP in compiled Node build: not performed.
+Owner 166-record backup restore: not verified.
+Existing private photos, QR scanning and physical Dell hardware after upgrade: not verified.
+Preview production data/identity/photo import: required exports and bytes missing.
+Email and scheduled email delivery: fresh provider connection/sender still needed.
+Lovable publication and domain cutover: not performed.
+
+NEXT
+Attach karatdesk-dell-v2.5.3-upgrade.zip (or the actual last shipped Dell upgrade ZIP).
+Build the final karatdesk-dell-v2.6.0-upgrade.zip from that baseline, retain 60 MB/300-second restore rules and gateway routing, regenerate checksums, then owner-run installation and verification.
+
+Do not run the source kit's original all-in-one installer on the existing Dell.
+Do not mistake a compilation/asset check for successful authenticated production behavior.

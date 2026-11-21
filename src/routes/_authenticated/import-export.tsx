@@ -1,0 +1,3 @@
+import {createFileRoute} from '@tanstack/react-router';
+import {ImportExport} from '@/components/pos/import-export';
+export const Route=createFileRoute('/_authenticated/import-export')({head:()=>({meta:[{title:'Import and export | KaratDesk'},{name:'description',content:'Review stock imports and export branch shop records.'},{property:'og:title',content:'Import and export | KaratDesk'},{property:'og:description',content:'Manage branch data with validated stock imports.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary_large_image'}]}),component:ImportExport});

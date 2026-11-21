@@ -1,0 +1,3 @@
+import {createFileRoute} from '@tanstack/react-router';
+import {PettyCash} from '@/components/pos/audit';
+export const Route=createFileRoute('/_authenticated/expenses')({head:()=>({meta:[{title:'Expenses | KaratDesk'},{name:'description',content:'Record and review branch expenses paid from main cash.'},{property:'og:title',content:'Expenses | KaratDesk'},{property:'og:description',content:'Record and review branch expenses paid from main cash.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary_large_image'}]}),component:PettyCash});

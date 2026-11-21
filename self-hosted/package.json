@@ -1,0 +1,9 @@
+{
+  "name": "karatdesk",
+  "version": "2.5.2",
+  "private": true,
+  "type": "module",
+  "main": "app.cjs",
+  "engines": { "node": ">=22" },
+  "scripts": { "start": "node start.mjs" }
+}

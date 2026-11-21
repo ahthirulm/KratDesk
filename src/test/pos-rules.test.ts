@@ -1,0 +1,20 @@
+import {describe,it,expect} from 'vitest';
+import {schedule,distribute,allocate,round,money,setMoneyCurrency,cleanNumberText} from '@/lib/pos-rules';
+describe('Jewellery pricing and loans',()=>{
+it('prices only grams times rate',()=>expect(round(12.450*30000)).toBe(373500));
+it('one pawn is eight grams',()=>expect(30000*8).toBe(240000));
+it('spreads negotiation proportionally with remainder on last piece',()=>expect(distribute(100,[1,1,1])).toEqual([33.33,33.33,33.34]));
+it('floors equal installments and puts remaining cents on last',()=>expect(schedule(100,3,'Monthly','2026-01-31').map(i=>i.amount)).toEqual([33.33,33.33,33.34]));
+it('monthly dates retain day after shorter months',()=>expect(schedule(100,3,'Monthly','2026-01-31').map(i=>i.due_date)).toEqual(['2026-01-31','2026-02-28','2026-03-31']));
+it('weekly loans use seven-day increments',()=>expect(schedule(100,2,'Weekly','2026-01-31')[1]?.due_date).toBe('2026-02-07'));
+it('fortnightly loans use fourteen-day increments',()=>expect(schedule(100,2,'Every 2 weeks','2026-01-31')[1]?.due_date).toBe('2026-02-14'));
+it('rejects counts outside 1–120',()=>{expect(schedule(100,0,'Monthly','2026-01-31')).toEqual([]);expect(schedule(100,121,'Monthly','2026-01-31')).toEqual([]);expect(schedule(100,120,'Monthly','2026-01-31')).toHaveLength(120)});
+it('applies repayments oldest-first, with overdue unpaid balances',()=>expect(allocate([{amount:100,due_date:'2026-01-01'},{amount:100,due_date:'2026-02-01'}],150,'2026-03-01').map(i=>[i.paid,i.balance,i.status])).toEqual([[100,0,'Paid'],[50,50,'Overdue']]));
+it('omits .00 on whole amounts while keeping separators and hiding currency prefixes',()=>expect(money(1250000)).toBe('1,250,000'));
+it('keeps two decimal places when an amount has cents',()=>expect(money(41.50)).toBe('41.50'));
+it('does not round cents to whole amounts',()=>expect(money(55.99)).toBe('55.99'));
+it('keeps amount display independent of the configured currency code',()=>{setMoneyCurrency('USD');expect(money(5000)).toBe('5,000');setMoneyCurrency('  ');expect(money(5000)).toBe('5,000')});
+it('drops a stuck leading zero from a typed rate',()=>expect(cleanNumberText('032500')).toBe('32500'));
+it('keeps a single zero and decimal rates intact',()=>{expect(cleanNumberText('0')).toBe('0');expect(cleanNumberText('0.05')).toBe('0.05')});
+it('leaves an emptied rate field empty instead of zero',()=>{expect(cleanNumberText('')).toBe('');expect(cleanNumberText('  ')).toBe('')});
+});

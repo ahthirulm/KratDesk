@@ -1,0 +1,9 @@
+CREATE OR REPLACE FUNCTION public.sync_shop_sequences() RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ DECLARE n bigint; BEGIN
+IF NOT public.has_role(auth.uid(),'admin') THEN RAISE EXCEPTION 'Owner access required'; END IF;
+SELECT coalesce(max((substring(tag_id from '^JW-([0-9]+)$'))::bigint),0) INTO n FROM public.items; PERFORM setval('public.tag_seq',greatest(n,(SELECT last_value FROM public.tag_seq)),true);
+SELECT coalesce(max((substring(system_tag from '(?:^KD|^KD-)([0-9]+)$'))::bigint),0) INTO n FROM public.items; PERFORM setval('public.system_tag_seq',greatest(n,(SELECT last_value FROM public.system_tag_seq)),true);
+SELECT coalesce(max((substring(invoice_no from 'INV-([0-9]+)$'))::bigint),0) INTO n FROM public.sales; PERFORM setval('public.invoice_seq',greatest(n,(SELECT last_value FROM public.invoice_seq)),true);
+SELECT coalesce(max((substring(loan_no from '([0-9]+)$'))::bigint),0) INTO n FROM public.loans; PERFORM setval('public.loan_seq',greatest(n,(SELECT last_value FROM public.loan_seq)),true);
+SELECT coalesce(max((substring(receipt_no from '([0-9]+)$'))::bigint),0) INTO n FROM public.loan_payments; PERFORM setval('public.receipt_seq',greatest(n,(SELECT last_value FROM public.receipt_seq)),true);
+SELECT coalesce(max((substring(job_no from '([0-9]+)$'))::bigint),0) INTO n FROM public.repair_jobs; PERFORM setval('public.repair_job_seq',greatest(n,(SELECT last_value FROM public.repair_job_seq)),true);
+END; $$; REVOKE ALL ON FUNCTION public.sync_shop_sequences() FROM PUBLIC,anon; GRANT EXECUTE ON FUNCTION public.sync_shop_sequences() TO authenticated;

@@ -1,0 +1,3 @@
+import {createFileRoute} from '@tanstack/react-router';
+import {Categories} from '@/components/pos/categories';
+export const Route=createFileRoute('/_authenticated/categories')({head:()=>({meta:[{title:'Stock categories | KaratDesk'},{name:'description',content:'Manage stock category names for your jewellery shop.'},{property:'og:title',content:'Stock categories | KaratDesk'},{property:'og:description',content:'Add, rename and remove unused jewellery categories.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary_large_image'}]}),component:Categories});

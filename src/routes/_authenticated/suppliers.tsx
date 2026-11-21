@@ -1,0 +1,3 @@
+import {createFileRoute} from '@tanstack/react-router';
+import {Suppliers} from '@/components/pos/suppliers';
+export const Route=createFileRoute('/_authenticated/suppliers')({head:()=>({meta:[{title:'Suppliers | KaratDesk'},{name:'description',content:'Manage jewellery suppliers and their contact details.'},{property:'og:title',content:'Suppliers | KaratDesk'},{property:'og:description',content:'Jewellery supplier directory for your shop.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary_large_image'}]}),component:Suppliers});

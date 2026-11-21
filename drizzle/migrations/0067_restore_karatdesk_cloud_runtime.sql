@@ -1,0 +1,1 @@
+COMMENT ON SCHEMA public IS 'KaratDesk Jewellery POS and Inventory application schema';

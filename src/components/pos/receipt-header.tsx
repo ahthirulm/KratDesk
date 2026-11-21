@@ -1,0 +1,3 @@
+import {usePos} from './data';
+export function ReceiptHeader(){const {data}=usePos();const s=data.settings;return <div className="receipt-head">{s.print_logo&&<img src={s.print_logo} alt="" className="receipt-logo"/>}<h2>{s.shop_name}</h2>{s.print_header&&<p>{s.print_header}</p>}{(s.print_show_address&&s.address)||(s.print_show_phone&&s.phone)?<p>{s.print_show_address&&s.address}{s.print_show_address&&s.address&&s.print_show_phone&&s.phone&&<br/>}{s.print_show_phone&&s.phone}</p>:null}</div>}
+export function ReceiptFooter(){const {data}=usePos();return data.settings.print_footer?<p className="text-center">{data.settings.print_footer}</p>:null}

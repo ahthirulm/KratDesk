@@ -1,0 +1,11 @@
+import {expect,it} from 'vitest';
+import {changePettyCategory} from '@/lib/petty-categories';
+const cats=[{id:'tea',branch_id:'B1',name:'Refreshments'},{id:'travel',branch_id:'B1',name:'Transport'},{id:'b2',branch_id:'B2',name:'Transport'}];
+it('adds an expense category only to the selected branch',()=>{const next=changePettyCategory(cats,[],'B1',null,'Cleaning');expect(next.find(c=>c.name==='Cleaning')?.branch_id).toBe('B1');expect(next.filter(c=>c.branch_id==='B2')).toEqual([cats[2]])});
+it('renames a category without rewriting old ledger labels',()=>{const entries=[{branch_id:'B1',category:'Refreshments',category_id:'tea'}];expect(changePettyCategory(cats,entries,'B1','tea','Staff meals').find(c=>c.id==='tea')?.name).toBe('Staff meals');expect(entries[0]?.category).toBe('Refreshments')});
+it('removes an unused category',()=>expect(changePettyCategory(cats,[],'B1','travel',null).some(c=>c.id==='travel')).toBe(false));
+it('blocks removing categories with linked historical entries after rename',()=>expect(()=>changePettyCategory([{id:'tea',branch_id:'B1',name:'Meals'}],[{branch_id:'B1',category:'Refreshments',category_id:'tea'}],'B1','tea',null)).toThrow('used'));
+it('rejects duplicate names ignoring case and whitespace',()=>expect(()=>changePettyCategory(cats,[],'B1',null,' transport ')).toThrow('already exists'));
+it('rejects editing a category from another branch',()=>expect(()=>changePettyCategory(cats,[],'B1','b2','Taxi')).toThrow('this branch'));
+it('enables staff and month by default for Salaries',()=>{const category=changePettyCategory(cats,[],'B1',null,'Salaries').find(c=>c.name==='Salaries');expect(category?.requires_staff).toBe(true);expect(category?.requires_month).toBe(true)});
+it('keeps extra fields configurable for any category',()=>{const category=changePettyCategory(cats,[],'B1',null,'Cleaning',{requires_staff:true,requires_month:false}).find(c=>c.name==='Cleaning');expect(category?.requires_staff).toBe(true);expect(category?.requires_month).toBe(false)});

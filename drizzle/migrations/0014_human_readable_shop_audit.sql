@@ -1,0 +1,26 @@
+CREATE TABLE public.audit_events(id uuid PRIMARY KEY DEFAULT gen_random_uuid(), actor_id uuid, actor_name text NOT NULL, branch_id text, category text NOT NULL, action text NOT NULL, description text NOT NULL, record_id text, created_at timestamptz NOT NULL DEFAULT now());
+GRANT SELECT ON public.audit_events TO authenticated; GRANT ALL ON public.audit_events TO service_role;
+ALTER TABLE public.audit_events ENABLE ROW LEVEL SECURITY;
+CREATE POLICY audit_owner_read ON public.audit_events FOR SELECT TO authenticated USING(public.has_role(auth.uid(),'admin'));
+CREATE INDEX audit_events_time ON public.audit_events(created_at DESC); CREATE INDEX audit_events_branch ON public.audit_events(branch_id,created_at DESC);
+CREATE FUNCTION public.capture_shop_audit() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ DECLARE r jsonb; previous jsonb; who text; label text; cat text; msg text; verb text; bid text; BEGIN IF TG_OP='DELETE' THEN r:=to_jsonb(OLD); ELSE r:=to_jsonb(NEW); END IF; IF TG_OP='UPDATE' THEN previous:=to_jsonb(OLD); IF r=previous THEN RETURN NEW; END IF; END IF; SELECT display_name INTO who FROM public.profiles WHERE id=auth.uid(); who:=coalesce(who,'System'); verb:=CASE TG_OP WHEN 'INSERT' THEN 'Added' WHEN 'DELETE' THEN 'Removed' ELSE 'Updated' END; bid:=r->>'branch_id';
+CASE TG_TABLE_NAME
+WHEN 'items' THEN cat:='Stock'; label:=coalesce(r->>'tag_id','piece'); IF TG_OP='UPDATE' AND r->>'branch_id' IS DISTINCT FROM previous->>'branch_id' THEN RETURN NEW; END IF; IF TG_OP='UPDATE' AND r->>'status'='Sold' AND previous->>'status'<>'Sold' THEN verb:='Sold'; END IF; msg:=verb||' jewellery '||label||' — '||coalesce(r->>'name','');
+WHEN 'sales' THEN cat:='Sales';verb:='Completed';msg:='Completed invoice '||(r->>'invoice_no')||' for LKR '||to_char((r->>'final_total')::numeric,'FM999,999,999,999,990.00');
+WHEN 'loan_payments' THEN cat:='Repayments';verb:='Collected';msg:='Collected LKR '||to_char((r->>'amount')::numeric,'FM999,999,999,999,990.00')||' by '||(r->>'method')||' — receipt '||(r->>'receipt_no');
+WHEN 'stock_movements' THEN cat:='Transfers';verb:='Transferred';bid:=r->>'from_branch';msg:='Transferred jewellery '||(r->>'internal_tag')||' from '||coalesce((SELECT name FROM public.branches WHERE id=r->>'from_branch'),r->>'from_branch')||' to '||coalesce((SELECT name FROM public.branches WHERE id=r->>'to_branch'),r->>'to_branch');
+WHEN 'branches' THEN cat:='Branches';bid:=r->>'id';msg:=verb||' branch '||(r->>'name')||' — '||CASE WHEN (r->>'active')::boolean THEN 'active' ELSE 'inactive' END;
+WHEN 'staff_roles' THEN cat:='Roles';msg:=verb||' role '||(r->>'name')||' and its permissions';
+WHEN 'staff_access' THEN cat:='Staff';msg:=CASE WHEN (r->>'active')::boolean THEN 'Approved access for ' ELSE 'Disabled access for ' END||coalesce((SELECT display_name FROM public.profiles WHERE id=(r->>'user_id')::uuid),'staff member')||' as '||coalesce((SELECT name FROM public.staff_roles WHERE id=(r->>'role_id')::uuid),'assigned role');
+WHEN 'customers' THEN cat:='Customers';msg:=verb||' customer profile for '||(r->>'name');
+WHEN 'suppliers' THEN cat:='Suppliers';msg:=verb||' supplier '||(r->>'name');
+WHEN 'stock_categories' THEN cat:='Categories';msg:=verb||' category '||(r->>'name'); IF TG_OP='UPDATE' THEN msg:='Renamed category '||(previous->>'name')||' to '||(r->>'name'); END IF;
+WHEN 'settings' THEN cat:='Settings';msg:='Updated shop settings';
+WHEN 'metal_types' THEN cat:='Metals';msg:=verb||' metal type '||(r->>'name');
+ELSE RETURN NULL;
+END CASE;
+INSERT INTO public.audit_events(actor_id,actor_name,branch_id,category,action,description,record_id) VALUES(auth.uid(),who,bid,cat,verb,msg,coalesce(r->>'id',r->>'user_id',r->>'name'));
+IF TG_OP='DELETE' THEN RETURN OLD; ELSE RETURN NEW; END IF;
+END $$;
+REVOKE ALL ON FUNCTION public.capture_shop_audit() FROM PUBLIC,anon,authenticated;
+DO $$ DECLARE t text; BEGIN FOREACH t IN ARRAY ARRAY['items','sales','loan_payments','stock_movements','branches','staff_roles','staff_access','customers','suppliers','stock_categories','settings','metal_types'] LOOP EXECUTE format('CREATE TRIGGER shop_audit AFTER INSERT OR UPDATE OR DELETE ON public.%I FOR EACH ROW EXECUTE FUNCTION public.capture_shop_audit()',t); END LOOP; END $$;

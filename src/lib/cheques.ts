@@ -1,0 +1,4 @@
+import {today} from './pos-rules';
+export type ChequeDetails={cheque_number:string;cheque_date:string};
+export function validateCheque(method:string,details:ChequeDetails){if(method!=='Cheque')return;const date=new Date(details.cheque_date+'T12:00:00Z');if(!details.cheque_number.trim()||!/^\d{4}-\d{2}-\d{2}$/.test(details.cheque_date)||!Number.isFinite(date.getTime())||date.toISOString().slice(0,10)!==details.cheque_date)throw new Error('Cheque number and a valid deposit date are required');}
+export function chequeDue(cheque:{cheque_date:string;deposited_at:string|null},date=today()){return !cheque.deposited_at&&cheque.cheque_date<=date;}

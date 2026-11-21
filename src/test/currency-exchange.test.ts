@@ -1,0 +1,11 @@
+import {expect,it} from 'vitest';
+import {exchangeTotal,fxApply,fxReport,makeFxDemo,validateCurrency,type FxInput} from '@/lib/currency-exchange';
+const input:FxInput={branch_id:'B1',currency:'USD',kind:'Buy',amount:100,rate:300,counterparty:'',reference:'',note:''};
+it('keeps exchange accounts and reports separate from jewellery records',()=>{const d=makeFxDemo('2026-11-17');expect(fxReport(d.entries,'B1').sold).toBe(31000);expect(fxReport(d.entries,'B2').sold).toBe(31000);expect(fxReport(d.entries,'B1').profit).toBe(1000)});
+it('derives LKR totals from foreign amount times rate exactly',()=>expect(exchangeTotal(12.34,300.123456)).toBe(3703.52));
+it('rejects buying above shared branch cash',()=>expect(()=>fxApply([{branch_id:'B1',currency:'LKR',balance:29999,cost_lkr:0}],input)).toThrow('Insufficient shared branch cash'));
+it('rejects selling above currency holdings',()=>expect(()=>fxApply([],{...input,kind:'Sell'})).toThrow('Insufficient'));
+it('uses weighted average cost for realised exchange profit',()=>{let a:ReturnType<typeof fxApply>['accounts']=[{branch_id:'B1',currency:'LKR',balance:100000,cost_lkr:0}];a=fxApply(a,input).accounts;a=fxApply(a,{...input,rate:320}).accounts;const r=fxApply(a,{...input,kind:'Sell',rate:330});expect(r.profit_lkr).toBe(2000);expect(r.accounts.find(a=>a.currency==='USD')?.cost_lkr).toBe(31000)});
+it('deducts shared branch cash directly when buying currency',()=>{const r=fxApply([{branch_id:'B1',currency:'LKR',balance:50000,cost_lkr:0}],input);expect(r.accounts.find(a=>a.currency==='LKR')?.balance).toBe(20000);expect(r.accounts.find(a=>a.currency==='USD')?.balance).toBe(100)});
+it('prevents deleting used currencies while permitting unused removal',()=>{const d=makeFxDemo('2026-11-17');expect(()=>validateCurrency(d.currencies,d.entries,null,'fx-usd')).toThrow('history');expect(()=>validateCurrency(d.currencies,d.entries,null,'fx-gbp')).not.toThrow()});
+it('keeps original codes stable once used',()=>{const d=makeFxDemo('2026-11-17');expect(()=>validateCurrency(d.currencies,d.entries,{id:'fx-usd',code:'AUD',name:'Australian Dollar',active:true},'fx-usd')).toThrow('codes cannot')});

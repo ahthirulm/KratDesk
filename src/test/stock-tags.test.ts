@@ -1,0 +1,11 @@
+import {expect,it} from 'vitest';
+import {normalizeTag,tagExists,nextDemoSystemTag,findStockItem} from '@/lib/stock-tags';
+const items=[{id:'one',tag_id:'CJ-00123'}];
+it('finds the shop tag regardless of case or surrounding spaces',()=>{expect(normalizeTag(' CJ-00123 ')).toBe('cj-00123');expect(tagExists(items,' cj-00123 ')).toBe(true)});
+it('rejects a tag already used by another piece',()=>expect(tagExists(items,'CJ-00123','two')).toBe(true));
+it('allows retaining a tag on its own piece',()=>expect(tagExists(items,'CJ-00123','one')).toBe(false));
+it('allows a new shop tag',()=>expect(tagExists(items,'CJ-00124')).toBe(false));
+it('generates a short separate system number without changing the internal tag',()=>{const item={tag_id:'CJ-00123',system_tag:'KD000036'};const next=nextDemoSystemTag([item]);expect(next).toBe('KD000037');expect(next).not.toBe(item.tag_id);expect(item.tag_id).toBe('CJ-00123');expect(nextDemoSystemTag([item,{system_tag:next}])).toBe('KD000038')});
+it('finds a jewellery piece by its printed system barcode',()=>{const stock=[{id:'piece',tag_id:'CHAIN-11',system_tag:'KD000009'}];expect(findStockItem(stock,' kd000009 ')?.id).toBe('piece')});
+it('continues to find a piece by its internal tag',()=>{const stock=[{id:'piece',tag_id:'CHAIN-11',system_tag:'KD000009'}];expect(findStockItem(stock,'chain-11')?.id).toBe('piece')});
+it('prioritises the unique system tag if an internal tag looks identical',()=>{const stock=[{id:'internal',tag_id:'KD000009',system_tag:'KD000010'},{id:'printed',tag_id:'CHAIN-11',system_tag:'KD000009'}];expect(findStockItem(stock,'KD000009')?.id).toBe('printed')});

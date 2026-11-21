@@ -1,0 +1,3 @@
+import {createFileRoute} from '@tanstack/react-router';
+import {Cheques} from '@/components/pos/cheques';
+export const Route=createFileRoute('/_authenticated/cheques')({head:()=>({meta:[{title:'Reminders | KaratDesk'},{name:'description',content:'Branch reminders with dates, plus cheque deposit reminders.'},{property:'og:title',content:'Reminders | KaratDesk'},{property:'og:description',content:'Track cheque numbers, dates and recorded deposits.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary_large_image'}]}),component:Cheques});

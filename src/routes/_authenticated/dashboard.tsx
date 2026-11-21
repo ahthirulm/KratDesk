@@ -1,0 +1,3 @@
+import {createFileRoute} from '@tanstack/react-router';
+import {Dashboard} from '@/components/pos/dashboard';
+export const Route=createFileRoute('/_authenticated/dashboard')({head:()=>({meta:[{title:'Branch dashboard | KaratDesk'},{name:'description',content:'Daily jewellery sales, combined jewellery and currency profit, stock and loan collections by branch.'},{property:'og:title',content:'Branch dashboard | KaratDesk'},{property:'og:description',content:'Track daily jewellery shop performance by branch.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary_large_image'}]}),component:Dashboard});

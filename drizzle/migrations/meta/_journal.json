@@ -1,0 +1,559 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794860226135,
+      "tag": "0000_jewellery_pos",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794860270882,
+      "tag": "0001_stock_photo_access",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794862680660,
+      "tag": "0002_billing_entered_price_per_gram",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794862844696,
+      "tag": "0003_shop_entered_stock_tags",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794863114730,
+      "tag": "0004_separate_system_stock_tags",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794863180700,
+      "tag": "0005_supplier_directory",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794863272655,
+      "tag": "0006_stock_jewellery_categories",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794896403657,
+      "tag": "0007_restrict_jewellery_photo_reads",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794896634921,
+      "tag": "0008_managed_stock_categories",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794896756700,
+      "tag": "0009_category_empty_parameters",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794896848110,
+      "tag": "0010_customer_profile_management",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794897675792,
+      "tag": "0011_central_management_directories",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1794897738019,
+      "tag": "0012_branch_scoped_transactions_and_access",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1794898854585,
+      "tag": "0013_central_permission_consistency",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1794899311212,
+      "tag": "0014_human_readable_shop_audit",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1794899351714,
+      "tag": "0015_branch_petty_cash_ledger",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1794900543670,
+      "tag": "0016_billing_pricing_unit",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1794900842898,
+      "tag": "0017_petty_cash_category_directory",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1794901053033,
+      "tag": "0018_loan_term_revisions",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1794901145748,
+      "tag": "0019_cheque_payment_reminders",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1794902126884,
+      "tag": "0020_separate_currency_exchange",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1794902799114,
+      "tag": "0021_staff_personal_profile",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1794903327536,
+      "tag": "0022_old_gold_pooled_trading",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1794903665030,
+      "tag": "0023_old_gold_branch_transfers",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1794907598464,
+      "tag": "0024_activate_secure_staff_access",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1794909000841,
+      "tag": "0025_fix_owner_setup_role",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1794909562597,
+      "tag": "0026_general_reminders",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1794909695030,
+      "tag": "0027_edit_delete_reminders",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1794910301129,
+      "tag": "0028_split_payments",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1794910438672,
+      "tag": "0029_bill_print_settings",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1794911346184,
+      "tag": "0030_add_settings_country",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1794913107953,
+      "tag": "0031_integrity_duplicates_and_values",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1794913160352,
+      "tag": "0032_sales_history_voids_and_returns",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1794913382271,
+      "tag": "0033_remaining_transaction_integrity",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1794913459464,
+      "tag": "0034_managing_director_role_guards",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1794913514388,
+      "tag": "0035_validate_shop_integrity_history",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1794913669835,
+      "tag": "0036_fix_operation_guard_variable_conflict",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1794913704033,
+      "tag": "0037_fix_sale_line_payload_path",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1794913748490,
+      "tag": "0038_fix_sale_reversal_variable_conflicts",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1794914481896,
+      "tag": "0039_shorten_system_stock_tags",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1794914702864,
+      "tag": "0040_share_branch_cash_across_operations",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1794915958823,
+      "tag": "0041_petty_expenses_use_main_cash",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1794916539257,
+      "tag": "0042_expense_crud_with_cash_corrections",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1794916769971,
+      "tag": "0043_expense_audit_wording",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1794916926286,
+      "tag": "0044_configurable_expense_staff_and_month",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1794917269091,
+      "tag": "0045_expense_payee_profiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1794917894716,
+      "tag": "0046_owner_capital_movements",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1794917932573,
+      "tag": "0047_owner_cash_managing_director",
+      "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1794918315990,
+      "tag": "0048_repair_jobs",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1794918513642,
+      "tag": "0049_jobs_custom_orders_customer_link",
+      "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1794918892902,
+      "tag": "0050_late_repairer_payment",
+      "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1794919028733,
+      "tag": "0051_custom_job_types",
+      "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1794919443066,
+      "tag": "0052_job_photo_support",
+      "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "7",
+      "when": 1794919778337,
+      "tag": "0053_repair_jobs_default_technician",
+      "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1794920516147,
+      "tag": "0054_job_payment_once_edit_delete",
+      "breakpoints": true
+    },
+    {
+      "idx": 55,
+      "version": "7",
+      "when": 1794921228887,
+      "tag": "0055_add_21k_gold_metal",
+      "breakpoints": true
+    },
+    {
+      "idx": 56,
+      "version": "7",
+      "when": 1794922070028,
+      "tag": "0056_sale_date_backdating",
+      "breakpoints": true
+    },
+    {
+      "idx": 57,
+      "version": "7",
+      "when": 1794923781271,
+      "tag": "0057_factory_reset_owner_only",
+      "breakpoints": true
+    },
+    {
+      "idx": 58,
+      "version": "7",
+      "when": 1794923999318,
+      "tag": "0058_administrator_role_and_scoped_reset",
+      "breakpoints": true
+    },
+    {
+      "idx": 59,
+      "version": "7",
+      "when": 1794924033727,
+      "tag": "0059_set_administrator_owner_only",
+      "breakpoints": true
+    },
+    {
+      "idx": 60,
+      "version": "7",
+      "when": 1794924134194,
+      "tag": "0060_sync_shop_sequences_after_restore",
+      "breakpoints": true
+    },
+    {
+      "idx": 61,
+      "version": "7",
+      "when": 1794925047829,
+      "tag": "0061_owner_system_health",
+      "breakpoints": true
+    },
+    {
+      "idx": 62,
+      "version": "7",
+      "when": 1794925089313,
+      "tag": "0062_fix_system_health_grouping",
+      "breakpoints": true
+    },
+    {
+      "idx": 63,
+      "version": "7",
+      "when": 1794926101926,
+      "tag": "0063_scheduled_email_backups",
+      "breakpoints": true
+    },
+    {
+      "idx": 64,
+      "version": "7",
+      "when": 1795047982491,
+      "tag": "0064_account_recovery_gold_rates_and_stock_tags",
+      "breakpoints": true
+    },
+    {
+      "idx": 65,
+      "version": "7",
+      "when": 1795048506937,
+      "tag": "0065_tighten_gold_rate_server_functions",
+      "breakpoints": true
+    },
+    {
+      "idx": 66,
+      "version": "7",
+      "when": 1795048664439,
+      "tag": "0066_restrict_job_types_and_job_photo_access",
+      "breakpoints": true
+    },
+    {
+      "idx": 67,
+      "version": "7",
+      "when": 1795073870347,
+      "tag": "0067_restore_karatdesk_cloud_runtime",
+      "breakpoints": true
+    },
+    {
+      "idx": 68,
+      "version": "7",
+      "when": 1795081456337,
+      "tag": "0068_atomic_backup_restore",
+      "breakpoints": true
+    },
+    {
+      "idx": 69,
+      "version": "7",
+      "when": 1795081619848,
+      "tag": "0069_safe_restore_sequence_tags",
+      "breakpoints": true
+    },
+    {
+      "idx": 70,
+      "version": "7",
+      "when": 1795083935453,
+      "tag": "0070_preserve_backup_branch_and_payment_records",
+      "breakpoints": true
+    },
+    {
+      "idx": 71,
+      "version": "7",
+      "when": 1795085397762,
+      "tag": "0071_default_petty_categories_for_new_branches",
+      "breakpoints": true
+    },
+    {
+      "idx": 72,
+      "version": "7",
+      "when": 1795085497387,
+      "tag": "0072_fix_save_staff_access_owner_guard",
+      "breakpoints": true
+    },
+    {
+      "idx": 73,
+      "version": "7",
+      "when": 1795089916525,
+      "tag": "0073_restore_full_clear_where_true",
+      "breakpoints": true
+    },
+    {
+      "idx": 74,
+      "version": "7",
+      "when": 1795092469789,
+      "tag": "0074_factory_reset_where_true",
+      "breakpoints": true
+    },
+    {
+      "idx": 75,
+      "version": "7",
+      "when": 1795154662288,
+      "tag": "0075_restore_keep_defaults_for_missing_columns",
+      "breakpoints": true
+    },
+    {
+      "idx": 76,
+      "version": "7",
+      "when": 1795158011799,
+      "tag": "0076_restore_records_server_only",
+      "breakpoints": true
+    },
+    {
+      "idx": 77,
+      "version": "7",
+      "when": 1795158132204,
+      "tag": "0077_restore_records_server_identity_first",
+      "breakpoints": true
+    },
+    {
+      "idx": 78,
+      "version": "7",
+      "when": 1795248007928,
+      "tag": "0078_restore_karatdesk_preview_history",
+      "breakpoints": true
+    }
+  ]
+}

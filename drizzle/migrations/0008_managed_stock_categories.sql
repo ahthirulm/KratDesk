@@ -1,0 +1,14 @@
+CREATE TABLE public.stock_categories (name text PRIMARY KEY CHECK (length(trim(name))>0));
+GRANT SELECT ON public.stock_categories TO authenticated;
+GRANT ALL ON public.stock_categories TO service_role;
+ALTER TABLE public.stock_categories ENABLE ROW LEVEL SECURITY;
+CREATE POLICY categories_read ON public.stock_categories FOR SELECT TO authenticated USING (public.has_role(auth.uid(),'admin') OR public.has_role(auth.uid(),'cashier'));
+INSERT INTO public.stock_categories(name) SELECT DISTINCT category FROM public.items ON CONFLICT DO NOTHING;
+INSERT INTO public.stock_categories(name) SELECT unnest(ARRAY['Ring','Earring','Bangles','Necklace','Chain','Pendant','Bracelet','Anklet','Other']) ON CONFLICT DO NOTHING;
+CREATE UNIQUE INDEX stock_categories_name_ci ON public.stock_categories(lower(trim(name)));
+ALTER TABLE public.items DROP CONSTRAINT items_category_valid;
+CREATE FUNCTION public.validate_stock_category() RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ BEGIN IF TG_OP='UPDATE' AND NEW.category IS NOT DISTINCT FROM OLD.category THEN RETURN NEW; END IF; PERFORM 1 FROM public.stock_categories WHERE name=NEW.category FOR KEY SHARE; IF NOT FOUND THEN RAISE EXCEPTION 'Choose an existing stock category'; END IF; RETURN NEW; END $$;
+CREATE TRIGGER validate_stock_category BEFORE INSERT OR UPDATE OF category ON public.items FOR EACH ROW EXECUTE FUNCTION public.validate_stock_category();
+CREATE FUNCTION public.manage_stock_category(old_name text, new_name text) RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ DECLARE clean text:=nullif(trim(new_name),''); BEGIN IF NOT public.has_role(auth.uid(),'admin') THEN RAISE EXCEPTION 'Admin only'; END IF; LOCK TABLE public.stock_categories IN SHARE ROW EXCLUSIVE MODE; IF old_name IS NULL THEN IF clean IS NULL THEN RAISE EXCEPTION 'Enter a category name'; END IF; INSERT INTO public.stock_categories VALUES(clean); ELSE PERFORM 1 FROM public.stock_categories WHERE name=old_name FOR UPDATE; IF NOT FOUND THEN RAISE EXCEPTION 'Category not found'; END IF; IF clean IS NULL THEN IF EXISTS(SELECT 1 FROM public.items WHERE category=old_name) THEN RAISE EXCEPTION 'This category is used by stock and cannot be removed'; END IF; DELETE FROM public.stock_categories WHERE name=old_name; ELSE UPDATE public.stock_categories SET name=clean WHERE name=old_name; UPDATE public.items SET category=clean WHERE category=old_name AND status='In Stock'; END IF; END IF; END $$;
+REVOKE ALL ON FUNCTION public.manage_stock_category(text,text) FROM PUBLIC,anon;
+GRANT EXECUTE ON FUNCTION public.manage_stock_category(text,text) TO authenticated,service_role;

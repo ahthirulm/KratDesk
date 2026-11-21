@@ -1,0 +1,1 @@
+ALTER POLICY jewellery_photos_read ON storage.objects TO authenticated USING (bucket_id = 'jewellery-photos' AND (owner_id = (SELECT auth.uid()::text) OR public.has_role((SELECT auth.uid()), 'admin'::public.app_role)));

@@ -1,0 +1,19 @@
+[Unit]
+Description=KaratDesk POS
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=karatdesk
+Group=karatdesk
+WorkingDirectory=/opt/karatdesk
+ExecStart=/usr/bin/node /opt/karatdesk/start.mjs
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

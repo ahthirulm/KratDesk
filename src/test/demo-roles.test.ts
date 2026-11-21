@@ -1,0 +1,7 @@
+import {expect,it} from 'vitest';
+import {DEMO_ROLES,assignedBranchesForRole,saveDemoRole} from '@/lib/demo-roles';
+it('creates a custom role with only selected permissions',()=>expect(saveDemoRole(DEMO_ROLES,null,{name:'Stock Clerk',permissions:['View stock']}).find(r=>r.name==='Stock Clerk')?.permissions).toEqual(['View stock']));
+it('protects the super admin role',()=>expect(()=>saveDemoRole(DEMO_ROLES,'Super Admin',{name:'Super Admin',permissions:[]})).toThrow('cannot be changed'));
+it('rejects duplicate role names',()=>expect(()=>saveDemoRole(DEMO_ROLES,null,{name:'cashier',permissions:[]})).toThrow('already exists'));
+it('gives Managing Director operations and reports without deep settings',()=>{const role=DEMO_ROLES.find(r=>r.name==='Managing Director')!;expect(role.permissions).toContain('Create bills');expect(role.permissions).toContain('View reports');expect(role.permissions).toContain('Manage currency exchange');expect(role.permissions).not.toContain('Manage settings');expect(role.permissions).not.toContain('Manage users');expect(role.permissions).not.toContain('Manage roles');});
+it('assigns every active branch to Managing Director',()=>{expect(assignedBranchesForRole('Managing Director','B1',['B1','B2','B3'])).toBe('B1,B2,B3');expect(assignedBranchesForRole('Cashier','B2',['B1','B2'])).toBe('B2');});

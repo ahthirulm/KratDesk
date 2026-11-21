@@ -1,0 +1,3 @@
+import {createFileRoute} from '@tanstack/react-router';
+import {CurrencyDirectory} from '@/components/pos/currency-exchange';
+export const Route=createFileRoute('/_authenticated/currencies')({head:()=>({meta:[{title:'Currencies | KaratDesk'},{name:'description',content:'Manage foreign currencies available for branch exchange trading.'},{property:'og:title',content:'Currencies | KaratDesk'},{property:'og:description',content:'Add, edit and safely remove foreign currency definitions.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary_large_image'}]}),component:CurrencyDirectory});

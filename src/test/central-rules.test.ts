@@ -1,0 +1,11 @@
+import {expect,it} from 'vitest';
+import {permissionAllowed,scopeStore,validateTransfer} from '@/lib/central-rules';
+import {createDemoStore} from '@/lib/demo-data';
+it('limits branch staff to assigned branches',()=>{expect(permissionAllowed(false,true,['Manage stock'],['B1'],'Manage stock','B1')).toBe(true);expect(permissionAllowed(false,true,['Manage stock'],['B1'],'Manage stock','B2')).toBe(false)});
+it('blocks inactive staff even with permissions',()=>expect(permissionAllowed(false,false,['Create bills'],['B1'],'Create bills','B1')).toBe(false));
+it('lets the owner access both branches',()=>expect(permissionAllowed(true,false,[],[],'Manage stock','B2')).toBe(true));
+it('never gives a cashier purchase-cost permission',()=>expect(permissionAllowed(false,true,['Create bills','View stock'],['B1'],'View costs and profit','B1')).toBe(false));
+it('prevents transfers of sold pieces',()=>expect(()=>validateTransfer({status:'Sold',branch_id:'B1'},'B1','B2',['B1','B2'])).toThrow('Only in-stock'));
+it('rejects a stale transfer after a piece moves',()=>expect(()=>validateTransfer({status:'In Stock',branch_id:'B2'},'B1','B2',['B1','B2'])).toThrow('already moved'));
+it('rejects transfers to the same branch',()=>expect(()=>validateTransfer({status:'In Stock',branch_id:'B1'},'B1','B1',['B1','B2'])).toThrow('another active'));
+it('keeps branch inventory and sales separate',()=>{const a=createDemoStore('B1');const b=createDemoStore('B2');const scoped=scopeStore({...a,items:[...a.items,...b.items],sales:[...a.sales,...b.sales]},'B2');expect(scoped.items).toHaveLength(18);expect(scoped.items.every(i=>i.branch_id==='B2')).toBe(true);expect(scoped.sales.every(s=>s.branch_id==='B2')).toBe(true)});

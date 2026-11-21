@@ -1,0 +1,3 @@
+import {createFileRoute} from '@tanstack/react-router';
+import {AuditHistory} from '@/components/pos/audit';
+export const Route=createFileRoute('/_authenticated/audit')({head:()=>({meta:[{title:'Audit history | KaratDesk'},{name:'description',content:'Audit history for your jewellery shop branches.'},{property:'og:title',content:'Audit history | KaratDesk'},{property:'og:description',content:'Branch operations with clear and accurate records.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary_large_image'}]}),component:AuditHistory});
